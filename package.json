@@ -5,6 +5,7 @@
   "author": "Eugene Sharygin <eush77@gmail.com>",
   "license": "MIT",
   "bin": "bin.js",
+  "preferGlobal": true,
   "homepage": "https://github.com/eush77/killsome",
   "repository": {
     "type": "git",
