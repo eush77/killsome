@@ -28,6 +28,8 @@ kill:
 
 Enter indices of instances to kill, in a single line (e.g. `1`, `01`, `012`). Here, `fish` with 19 threads is the process I would kill, so I enter `2`.
 
+If there are no more than 10 matches, a string of digits is a perfectly valid input. Otherwise, choices must be separated by commas or spaces: `1 2 12`, `1,2,12`, or any possible combination.
+
 ## Install
 
 ```shell
