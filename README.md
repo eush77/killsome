@@ -1,5 +1,7 @@
 # killsome [![Dependency Status][david-badge]][david] [![DevDependency Status][david-dev-badge]][david-dev]
 
+[![npm](https://nodei.co/npm/killsome.png)](https://nodei.co/npm/killsome/)
+
 [david-badge]: https://david-dm.org/eush77/killsome.png
 [david]: https://david-dm.org/eush77/killsome
 [david-dev-badge]: https://david-dm.org/eush77/killsome/dev-status.png
@@ -25,6 +27,12 @@ kill:
 ```
 
 Enter indices of instances to kill, in a single line (e.g. `1`, `01`, `012`). Here, `fish` with 19 threads is the process I would kill, so I enter `2`.
+
+## Install
+
+```shell
+npm install -g killsome
+```
 
 ## License
 
