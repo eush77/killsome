@@ -13,9 +13,14 @@ var spawn = require('child_process').spawn
 output.stdout = output.stderr;
 
 
+var usage = function () {
+  output.message('Usage:  killsome <name>');
+};
+
+
 (function (argv) {
   if (argv.length != 1) {
-    output.info('Usage: ' + process.argv[1] + ' <name>');
+    usage();
     process.exit(1);
   }
   var procname = argv[0];
