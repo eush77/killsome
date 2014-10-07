@@ -1,9 +1,9 @@
 # killsome [![Dependency Status][david-badge]][david] [![DevDependency Status][david-dev-badge]][david-dev]
 
-[david-badge]: https://david-dm.org/eush77/regex-format.png
-[david]: https://david-dm.org/eush77/regex-format
-[david-dev-badge]: https://david-dm.org/eush77/regex-format/dev-status.png
-[david-dev]: https://david-dm.org/eush77/regex-format#info=devDependencies
+[david-badge]: https://david-dm.org/eush77/killsome.png
+[david]: https://david-dm.org/eush77/killsome
+[david-dev-badge]: https://david-dm.org/eush77/killsome/dev-status.png
+[david-dev]: https://david-dm.org/eush77/killsome#info=devDependencies
 
 Kill processes by name interactively (like `killall`, except that not necessarily all and interactive by design).
 
