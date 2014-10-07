@@ -1,0 +1,34 @@
+{
+  "name": "killsome",
+  "version": "0.0.0",
+  "description": "Kill processes by name interactively (like killall, except that not necessarily all)",
+  "author": "Eugene Sharygin <eush77@gmail.com>",
+  "license": "MIT",
+  "bin": "bin.js",
+  "homepage": "https://github.com/eush77/killsome",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eush77/killsome"
+  },
+  "bugs": {
+    "url": "https://github.com/eush77/killsome/issues"
+  },
+  "keywords": [
+    "kill",
+    "killall",
+    "signal",
+    "process",
+    "ps",
+    "shell",
+    "cli",
+    "terminal",
+    "interactive"
+  ],
+  "dependencies": {
+    "cli-prompt": "^0.4.1",
+    "concat-stream": "^1.4.6",
+    "simple-output": "^0.2.2",
+    "uniq": "^1.0.1"
+  },
+  "devDependencies": {}
+}
