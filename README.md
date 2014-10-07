@@ -18,7 +18,7 @@ Usage: `killsome <name>`.
 You will be presented with all found instances and process trees they are roots of.
 
 ```
-$ killsome fish                                                                                                                                          01:08:00
+$ killsome fish
 0) fish---emacs
 1) fish---node-+-pstree
                `-{node}
