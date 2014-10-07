@@ -25,11 +25,6 @@ output.stdout = output.stderr;
   }).stdout.pipe(concat({ encoding: 'string' }, function (pids) {
     pids = pids.trim().split(/\s+/).map(Number);
 
-    if (10 <= pids.length) {
-      output.error('More than 10 processes found. I can\'t handle it.');
-      process.exit(1);
-    }
-
     (function printPstrees(pids, index, cb) {
       if (index < pids.length) {
         spawn('pstree', [pids[index]], {
@@ -45,7 +40,22 @@ output.stdout = output.stderr;
     }(pids, 0, function () {
 
       prompt('kill: ', function (indices) {
-        indices = uniq(indices.trim().split(''));
+        // If there are no more than 10 matches, a string of digits is a perfectly valid input.
+        // Otherwise, choices must be separated by commas or spaces.
+
+        if (pids.length <= 10) {
+          indices = indices.match(/\d/g);
+        }
+        else {
+          indices = indices.replace(/,/g, ' ')
+                           .replace(/[^\d\s]+/g, '')
+                           .trim()
+                           .split(/\s+/)
+          // Mapping to Number will equate 1 and 01.
+                           .map(Number);
+        }
+
+        indices = uniq(indices);
 
         (function killLoop() {
           if (indices.length) {
