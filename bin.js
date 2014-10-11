@@ -4,17 +4,14 @@
 
 var concat = require('concat-stream')
   , prompt = require('cli-prompt')
-  , uniq = require('uniq')
-  , output = require('simple-output');
+  , uniq = require('uniq');
 
 var spawn = require('child_process').spawn
   , util = require('util');
 
-output.stdout = output.stderr;
-
 
 var usage = function () {
-  output.message('Usage:  killsome <name>');
+  util.puts('Usage:  killsome <name>');
 };
 
 

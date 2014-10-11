@@ -28,7 +28,6 @@
   "dependencies": {
     "cli-prompt": "^0.4.1",
     "concat-stream": "^1.4.6",
-    "simple-output": "^0.2.2",
     "uniq": "^1.0.1"
   },
   "devDependencies": {}
