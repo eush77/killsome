@@ -28,6 +28,8 @@
   "dependencies": {
     "cli-prompt": "^0.4.1",
     "concat-stream": "^1.4.6",
+    "fzip": "^0.1.0",
+    "ps": "0.0.2",
     "uniq": "^1.0.1"
   },
   "devDependencies": {}

@@ -4,7 +4,9 @@
 
 var concat = require('concat-stream')
   , prompt = require('cli-prompt')
-  , uniq = require('uniq');
+  , uniq = require('uniq')
+  , ps = require('ps')
+  , fzip = require('fzip');
 
 var spawn = require('child_process').spawn
   , util = require('util');
@@ -12,6 +14,36 @@ var spawn = require('child_process').spawn
 
 var usage = function () {
   util.puts('Usage:  killsome <name>');
+};
+
+
+var printProcessInfo = function(pid, keys, cb) {
+  if (typeof keys == 'function') {
+    cb = keys;
+    keys = null;
+  }
+  keys = keys || ['pid'];
+
+  ps.lookup({
+    pid: pid,
+    format: keys.join(' '),
+    parse: true
+  }, function (err, psinfo) {
+    if (err) throw err;
+    psinfo = psinfo[0];
+
+    var status = fzip(keys, psinfo, function (key, value) {
+      return [key, value].join('=');
+    }).join(', ');
+    util.puts(status);
+
+    spawn('pstree', [pid], {
+      stdio: 'pipe'
+    }).stdout.pipe(concat({ encoding: 'string' }, function (tree) {
+      util.puts(tree);
+      cb();
+    }));
+  });
 };
 
 
@@ -29,12 +61,8 @@ var usage = function () {
 
     (function printPstrees(pids, index, cb) {
       if (index < pids.length) {
-        spawn('pstree', [pids[index]], {
-          stdio: 'pipe'
-        }).stdout.pipe(concat({ encoding: 'string' }, function (tree) {
-          util.puts(index + ') ' + tree.trim().replace(/\n/g, '\n   '));
-          printPstrees(pids, index + 1, cb);
-        }));
+        util.print(index + ') ');
+        printProcessInfo(pids[index], printPstrees.bind(null, pids, index + 1, cb));
       }
       else {
         cb();
