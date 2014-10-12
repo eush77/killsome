@@ -30,10 +30,17 @@ Options:
   --all          Show all
 ```
 
-You will be presented with all found instances and process trees they are roots of.
+Every boolean option can be negated with `--no-`, e.g. `killsome --no-pid <name>`.
+
+## Example
 
 ```
 $ killsome fish
+```
+
+You will be presented with all found instances and process trees they are roots of.
+
+```
 0) pid=4808, start=23:26:18
 fish---emacs
 
