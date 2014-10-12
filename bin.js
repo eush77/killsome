@@ -12,9 +12,65 @@ var spawn = require('child_process').spawn
   , util = require('util');
 
 
-var usage = function () {
-  util.puts('Usage:  killsome <name>');
-};
+var name = require('./package.json').name
+  , version = require('./package.json').version;
+
+var argv = require('yargs')
+             .usage(util.format('Usage:  %s [option]... <name>', name))
+             .help('help', 'Print this message')
+             .version(version, 'version', 'Print version number')
+             .demand(1)
+             .options({
+               pid: {
+                 alias: 'p',
+                 boolean: true,
+                 default: true,
+                 description: 'Show PID'
+               },
+               ppid: {
+                 alias: 'P',
+                 boolean: true,
+                 default: false,
+                 description: 'Show PPID'
+               },
+               user: {
+                 alias: 'u',
+                 boolean: true,
+                 default: false,
+                 description: 'Show EUSER'
+               },
+               command: {
+                 alias: 'c',
+                 boolean: true,
+                 default: false,
+                 description: 'Show COMMAND'
+               },
+               time: {
+                 alias: 't',
+                 boolean: true,
+                 default: true,
+                 description: 'Show START'
+               },
+               cpu: {
+                 alias: 'C',
+                 boolean: true,
+                 default: false,
+                 description: 'Show %CPU'
+               },
+               mem: {
+                 alias: 'M',
+                 boolean: true,
+                 default: false,
+                 description: 'Show %MEM'
+               },
+               tty: {
+                 alias: 'T',
+                 boolean: true,
+                 default: false,
+                 description: 'Show TTY'
+               }
+             })
+             .argv;
 
 
 var printProcessInfo = function(pid, keys, cb) {
@@ -48,11 +104,16 @@ var printProcessInfo = function(pid, keys, cb) {
 
 
 (function (argv) {
-  if (argv.length != 1) {
-    usage();
-    process.exit(1);
-  }
-  var procname = argv[0];
+  var procname = argv._[0];
+
+  var psKeys = [].concat(argv.pid ? ['pid'] : [],
+                         argv.ppid ? ['ppid'] : [],
+                         argv.user ? ['euser'] : [],
+                         argv.command ? ['comm'] : [],
+                         argv.time ? ['start'] : [],
+                         argv.cpu ? ['%cpu'] : [],
+                         argv.mem ? ['%mem'] : [],
+                         argv.tty ? ['tty'] : []);
 
   spawn('pgrep', ['-x', procname], {
     stdio: 'pipe'
@@ -62,7 +123,7 @@ var printProcessInfo = function(pid, keys, cb) {
     (function printPstrees(pids, index, cb) {
       if (index < pids.length) {
         util.print(index + ') ');
-        printProcessInfo(pids[index], printPstrees.bind(null, pids, index + 1, cb));
+        printProcessInfo(pids[index], psKeys, printPstrees.bind(null, pids, index + 1, cb));
       }
       else {
         cb();
@@ -95,4 +156,4 @@ var printProcessInfo = function(pid, keys, cb) {
       });
     }));
   }));
-}(process.argv.slice(2)));
+}(argv));

@@ -32,7 +32,8 @@
     "concat-stream": "^1.4.6",
     "fzip": "^0.1.0",
     "ps": "0.0.2",
-    "uniq": "^1.0.1"
+    "uniq": "^1.0.1",
+    "yargs": "^1.3.2"
   },
   "devDependencies": {}
 }
