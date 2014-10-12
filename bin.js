@@ -74,7 +74,7 @@ var printProcessInfo = function(pid, keys, cb) {
         // Otherwise, choices must be separated by commas or spaces.
 
         if (pids.length <= 10) {
-          indices = indices.match(/\d/g);
+          indices = indices.match(/\d/g) || [];
         }
         else {
           indices = indices.replace(/,/g, ' ')
