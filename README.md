@@ -19,14 +19,30 @@ You will be presented with all found instances and process trees they are roots 
 
 ```
 $ killsome fish
-0) fish---emacs
-1) fish---node-+-pstree
-               `-{node}
-2) fish---19*[{fish}]
+0) pid=2699
+fish---7*[{fish}]
+
+1) pid=4808
+fish---emacs
+
+2) pid=6097
+fish---python2.7---{python2.7}
+
+3) pid=9985
+fish---node---{node}
+
+4) pid=17165
+fish-+-emacs
+     `-node-+-pstree
+            `-{node}
+
+5) pid=19879
+fish---man---less
+
 kill:
 ```
 
-Enter indices of instances to kill, in a single line (e.g. `1`, `01`, `012`). Here, `fish` with 19 threads is the process I would kill, so I enter `2`.
+Enter indices of instances to kill, in a single line (e.g. `1`, `01`, `012`). Here, `fish` with 7 threads is the process I would kill, so I enter `0`.
 
 If there are no more than 10 matches, a string of digits is a perfectly valid input. Otherwise, choices must be separated by commas or spaces: `1 2 12`, `1,2,12`, or any possible combination.
 
