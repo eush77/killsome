@@ -70,6 +70,10 @@ var argv = require('yargs')
                  description: 'Show TTY'
                }
              })
+             .options('all', {
+               boolean: true,
+               description: 'Show all'
+             })
              .argv;
 
 
@@ -106,14 +110,18 @@ var printProcessInfo = function(pid, keys, cb) {
 (function (argv) {
   var procname = argv._[0];
 
-  var psKeys = [].concat(argv.pid ? ['pid'] : [],
-                         argv.ppid ? ['ppid'] : [],
-                         argv.user ? ['euser'] : [],
-                         argv.command ? ['comm'] : [],
-                         argv.time ? ['start'] : [],
-                         argv.cpu ? ['%cpu'] : [],
-                         argv.mem ? ['%mem'] : [],
-                         argv.tty ? ['tty'] : []);
+  var optset = function (key) {
+    return argv.all || argv[key];
+  };
+
+  var psKeys = [].concat(optset('pid') ? ['pid'] : [],
+                         optset('ppid') ? ['ppid'] : [],
+                         optset('user') ? ['euser'] : [],
+                         optset('command') ? ['comm'] : [],
+                         optset('time') ? ['start'] : [],
+                         optset('cpu') ? ['%cpu'] : [],
+                         optset('mem') ? ['%mem'] : [],
+                         optset('tty') ? ['tty'] : []);
 
   spawn('pgrep', ['-x', procname], {
     stdio: 'pipe'

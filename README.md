@@ -27,6 +27,7 @@ Options:
   --cpu, -C      Show %CPU             [default: false]
   --mem, -M      Show %MEM             [default: false]
   --tty, -T      Show TTY              [default: false]
+  --all          Show all
 ```
 
 You will be presented with all found instances and process trees they are roots of.
