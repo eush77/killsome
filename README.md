@@ -23,7 +23,7 @@ Options:
   --ppid, -P     Show PPID             [default: false]
   --user, -u     Show EUSER            [default: false]
   --command, -c  Show COMMAND          [default: false]
-  --time, -t     Show START            [default: true]
+  --start, -s    Show START            [default: true]
   --cpu, -C      Show %CPU             [default: false]
   --mem, -M      Show %MEM             [default: false]
   --tty, -T      Show TTY              [default: false]
