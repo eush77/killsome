@@ -1,3 +1,8 @@
+0.1.0 / 2014-10-13
+==================
+
+  * Accept signal to send (close [#2](https://github.com/eush77/killsome/issues/2))
+
 0.0.5 / 2014-10-13
 ==================
 

@@ -1,6 +1,6 @@
 {
   "name": "killsome",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Kill processes by name interactively (like killall, except that not necessarily all)",
   "author": "Eugene Sharygin <eush77@gmail.com>",
   "license": "MIT",
