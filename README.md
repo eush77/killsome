@@ -14,11 +14,12 @@ Processes are to be distinguished from one another by threads and subprocesses t
 ## CLI
 
 ```
-Usage:  killsome [option]... <name>
+Usage:  killsome [-<SIGNAL>] [option]... <name>
 
 Options:
   --help         Print this message
   --version      Print version number
+  --signal       Signal to be sent     [default: "TERM"]
   --pid, -p      Show PID              [default: true]
   --ppid, -P     Show PPID             [default: false]
   --user, -u     Show EUSER            [default: false]
@@ -28,6 +29,14 @@ Options:
   --mem, -M      Show %MEM             [default: false]
   --tty, -T      Show TTY              [default: false]
   --all          Show all
+```
+
+`--signal` accepts both numbers and symbolic names and also has a shorter form:
+
+```
+killsome --signal=9
+killsome --signal KILL
+killsome -KILL
 ```
 
 Every boolean option can be negated with `--no-`, e.g. `killsome --no-pid <name>`.
