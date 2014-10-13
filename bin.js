@@ -45,8 +45,8 @@ var argv = require('yargs')
                  default: false,
                  description: 'Show COMMAND'
                },
-               time: {
-                 alias: 't',
+               start: {
+                 alias: 's',
                  boolean: true,
                  default: true,
                  description: 'Show START'
@@ -118,7 +118,7 @@ var printProcessInfo = function(pid, keys, cb) {
                          optset('ppid') ? ['ppid'] : [],
                          optset('user') ? ['euser'] : [],
                          optset('command') ? ['comm'] : [],
-                         optset('time') ? ['start'] : [],
+                         optset('start') ? ['start'] : [],
                          optset('cpu') ? ['%cpu'] : [],
                          optset('mem') ? ['%mem'] : [],
                          optset('tty') ? ['tty'] : []);
