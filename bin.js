@@ -77,6 +77,18 @@ var argv = require('yargs')
              .argv;
 
 
+var psKeyMap = [
+  { arg: 'pid', key: 'pid'},
+  { arg: 'ppid', key: 'ppid'},
+  { arg: 'user', key: 'euser'},
+  { arg: 'command', key: 'comm'},
+  { arg: 'start', key: 'start'},
+  { arg: 'cpu', key: '%cpu'},
+  { arg: 'mem', key: '%mem'},
+  { arg: 'tty', key: 'tty'},
+];
+
+
 var printProcessInfo = function(pid, keys, cb) {
   if (typeof keys == 'function') {
     cb = keys;
@@ -110,18 +122,9 @@ var printProcessInfo = function(pid, keys, cb) {
 (function (argv) {
   var procname = argv._[0];
 
-  var optset = function (key) {
-    return argv.all || argv[key];
-  };
-
-  var psKeys = [].concat(optset('pid') ? ['pid'] : [],
-                         optset('ppid') ? ['ppid'] : [],
-                         optset('user') ? ['euser'] : [],
-                         optset('command') ? ['comm'] : [],
-                         optset('start') ? ['start'] : [],
-                         optset('cpu') ? ['%cpu'] : [],
-                         optset('mem') ? ['%mem'] : [],
-                         optset('tty') ? ['tty'] : []);
+  var psKeys = psKeyMap.map(function (option) {
+    return (argv.all || argv[option.arg]) ? option.key : null;
+  }).filter(Boolean);
 
   spawn('pgrep', ['-x', procname], {
     stdio: 'pipe'
