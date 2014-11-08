@@ -16,85 +16,79 @@ var spawn = require('child_process').spawn
 var name = require('./package.json').name
   , version = require('./package.json').version;
 
-var parseArgs = function (yargs) {
-  if (/^-[A-Z0-9]+$/.test(process.argv[2])) {
-    process.argv.splice(2, 1, '--signal', process.argv[2].slice(1));
-  }
+var argv = require('yargs-dashed')
+             .strict()
+             .usage(util.format('Usage:  %s [-<SIGNAL>] [option]... <name>', name))
+             .help('help', 'Print this message')
+             .version(version, 'version', 'Print version number')
+             .demand(1)
 
-  return yargs.parse(process.argv.slice(2));
-};
+             .dashed('signal')
+             .option('signal', {
+               default: 'TERM',
+               description: 'Signal to be sent'
+             })
+             .check(obj(function (argv) {
+               return !Array.isArray(argv.signal);
+             }).set('toString', function () {
+               return '--signal set multiple times';
+             }).get())
 
-var argv = parseArgs(require('yargs')
-                       .strict()
-                       .usage(util.format('Usage:  %s [-<SIGNAL>] [option]... <name>', name))
-                       .help('help', 'Print this message')
-                       .version(version, 'version', 'Print version number')
-                       .demand(1)
-
-                       .option('signal', {
-                         default: 'TERM',
-                         description: 'Signal to be sent'
-                       })
-                       .check(obj(function (argv) {
-                         return !Array.isArray(argv.signal);
-                       }).set('toString', function () {
-                         return '--signal set multiple times';
-                       }).get())
-
-                       .options({
-                         pid: {
-                           alias: 'p',
-                           boolean: true,
-                           default: true,
-                           description: 'Show PID'
-                         },
-                         ppid: {
-                           alias: 'P',
-                           boolean: true,
-                           default: false,
-                           description: 'Show PPID'
-                         },
-                         user: {
-                           alias: 'u',
-                           boolean: true,
-                           default: false,
-                           description: 'Show EUSER'
-                         },
-                         command: {
-                           alias: 'c',
-                           boolean: true,
-                           default: false,
-                           description: 'Show COMMAND'
-                         },
-                         start: {
-                           alias: 's',
-                           boolean: true,
-                           default: true,
-                           description: 'Show START'
-                         },
-                         cpu: {
-                           alias: 'C',
-                           boolean: true,
-                           default: false,
-                           description: 'Show %CPU'
-                         },
-                         mem: {
-                           alias: 'M',
-                           boolean: true,
-                           default: false,
-                           description: 'Show %MEM'
-                         },
-                         tty: {
-                           alias: 'T',
-                           boolean: true,
-                           default: false,
-                           description: 'Show TTY'
-                         }
-                       })
-                       .option('all', {
-                         boolean: true,
-                         description: 'Show all'
-                       }));
+             .options({
+               pid: {
+                 alias: 'p',
+                 boolean: true,
+                 default: true,
+                 description: 'Show PID'
+               },
+               ppid: {
+                 alias: 'P',
+                 boolean: true,
+                 default: false,
+                 description: 'Show PPID'
+               },
+               user: {
+                 alias: 'u',
+                 boolean: true,
+                 default: false,
+                 description: 'Show EUSER'
+               },
+               command: {
+                 alias: 'c',
+                 boolean: true,
+                 default: false,
+                 description: 'Show COMMAND'
+               },
+               start: {
+                 alias: 's',
+                 boolean: true,
+                 default: true,
+                 description: 'Show START'
+               },
+               cpu: {
+                 alias: 'C',
+                 boolean: true,
+                 default: false,
+                 description: 'Show %CPU'
+               },
+               mem: {
+                 alias: 'M',
+                 boolean: true,
+                 default: false,
+                 description: 'Show %MEM'
+               },
+               tty: {
+                 alias: 'T',
+                 boolean: true,
+                 default: false,
+                 description: 'Show TTY'
+               }
+             })
+             .option('all', {
+               boolean: true,
+               description: 'Show all'
+             })
+             .argv;
 
 
 var psKeyMap = [
