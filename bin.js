@@ -7,7 +7,8 @@ var concat = require('concat-stream')
   , uniq = require('uniq')
   , ps = require('ps')
   , fzip = require('fzip')
-  , obj = require('obj');
+  , obj = require('obj')
+  , debug = require('debug')('killsome');
 
 var spawn = require('child_process').spawn
   , format = require('util').format;
@@ -176,7 +177,10 @@ var printProcessInfo = function(pid, keys, cb) {
 
         (function killLoop() {
           if (indices.length) {
-            spawn('kill', ['--signal', signal, pids[indices.shift()]]).on('exit', killLoop);
+            var killArgs = ['--signal', signal, pids[indices.shift()]];
+            debug('kill %s', killArgs.join(' '));
+            spawn('kill', killArgs)
+              .on('exit', killLoop);
           }
         }());
       });
