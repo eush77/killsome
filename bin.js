@@ -158,8 +158,9 @@ var printProcessInfo = function(pid, keys, cb) {
     }(pids, 0, function () {
 
       prompt('kill: ', function (indices) {
-        // If there are no more than 10 matches, a string of digits is a perfectly valid input.
-        // Otherwise, choices must be separated by commas or spaces.
+        // If there are no more than 10 matches, a string of digits is
+        // a perfectly valid input. Otherwise, choices must be separated
+        // by commas or spaces.
 
         if (pids.length <= 10) {
           indices = indices.match(/\d/g) || [];
@@ -177,7 +178,7 @@ var printProcessInfo = function(pid, keys, cb) {
 
         (function killLoop() {
           if (indices.length) {
-            var killArgs = ['--signal', signal, pids[indices.shift()]];
+            var killArgs = ['-' + signal, pids[indices.shift()]];
             debug('kill %s', killArgs.join(' '));
             spawn('kill', killArgs)
               .on('exit', killLoop);
