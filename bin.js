@@ -10,7 +10,7 @@ var concat = require('concat-stream')
   , obj = require('obj');
 
 var spawn = require('child_process').spawn
-  , util = require('util');
+  , format = require('util').format;
 
 
 var name = require('./package.json').name
@@ -18,7 +18,7 @@ var name = require('./package.json').name
 
 var argv = require('yargs-dashed')
              .strict()
-             .usage(util.format('Usage:  %s [-<SIGNAL>] [option]... <name>', name))
+             .usage(format('Usage:  %s [-<SIGNAL>] [option]... <name>', name))
              .help('help', 'Print this message')
              .version(version, 'version', 'Print version number')
              .demand(1)
@@ -121,12 +121,12 @@ var printProcessInfo = function(pid, keys, cb) {
     var status = fzip(keys, psinfo, function (key, value) {
       return [key, value].join('=');
     }).join(', ');
-    util.puts(status);
+    console.log(status);
 
     spawn('pstree', [pid], {
       stdio: 'pipe'
     }).stdout.pipe(concat({ encoding: 'string' }, function (tree) {
-      util.puts(tree);
+      console.log(tree);
       cb();
     }));
   });
@@ -148,7 +148,7 @@ var printProcessInfo = function(pid, keys, cb) {
 
     (function printPstrees(pids, index, cb) {
       if (index < pids.length) {
-        util.print(index + ') ');
+        process.stdout.write(index + ') ');
         printProcessInfo(pids[index], psKeys, printPstrees.bind(null, pids, index + 1, cb));
       }
       else {
