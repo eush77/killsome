@@ -96,7 +96,7 @@ var psKeyMap = [
   { arg: 'pid', key: 'pid'},
   { arg: 'ppid', key: 'ppid'},
   { arg: 'user', key: 'euser'},
-  { arg: 'command', key: 'comm'},
+  { arg: 'command', key: 'command'},
   { arg: 'start', key: 'start'},
   { arg: 'cpu', key: '%cpu'},
   { arg: 'mem', key: '%mem'},
@@ -111,6 +111,22 @@ var printProcessInfo = function(pid, keys, cb) {
   }
   keys = keys || ['pid'];
 
+  var commandKeyIndex = keys.indexOf('command');
+  if (0 <= commandKeyIndex && commandKeyIndex < keys.length - 1) {
+    // "command" key, if present, must be the last in the list:
+    //
+    //     keys: ["pid", "start", "command"]
+    //   psinfo: ["26140", "13:01:44", "emacs", "-nw", "bin.js"]
+    //
+    // Later in this function psinfo entries correspoding to the "command" key
+    // are grouped into a single array.
+    //
+    //  psinfo2: ["26140", "13:01:44", ["emacs", "-nw", "bin.js"]]
+    //
+    keys.splice(commandKeyIndex, 1);
+    keys.push('command');
+  }
+
   ps.lookup({
     pid: pid,
     format: keys.join(' '),
@@ -119,7 +135,16 @@ var printProcessInfo = function(pid, keys, cb) {
     if (err) throw err;
     psinfo = psinfo[0];
 
+    if (keys.length < psinfo.length) {
+      var lastIndex = keys.length - 1;
+      psinfo.splice(lastIndex, psinfo.length,
+                    psinfo.slice(lastIndex).join(' '));
+    }
+
     var status = fzip(keys, psinfo, function (key, value) {
+      if (/[\s,]/.test(value)) {
+        value = JSON.stringify(value);
+      }
       return [key, value].join('=');
     }).join(', ');
     console.log(status);
