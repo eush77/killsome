@@ -2,94 +2,94 @@
 
 'use strict';
 
-var concat = require('concat-stream')
-  , prompt = require('cli-prompt')
-  , uniq = require('uniq')
-  , ps = require('ps')
-  , fzip = require('fzip')
-  , obj = require('obj')
-  , debug = require('debug')('killsome');
+var concat = require('concat-stream'),
+    prompt = require('cli-prompt'),
+    uniq = require('uniq'),
+    ps = require('ps'),
+    fzip = require('fzip'),
+    obj = require('obj'),
+    debug = require('debug')('killsome');
 
-var spawn = require('child_process').spawn
-  , format = require('util').format;
+var spawn = require('child_process').spawn,
+    format = require('util').format;
 
 
-var name = require('./package.json').name
-  , version = require('./package.json').version;
+var name = require('./package.json').name,
+    version = require('./package.json').version;
 
 var argv = require('yargs-dashed')
-             .strict()
-             .usage(format('Usage:  %s [-<SIGNAL>] [option]... <name>', name))
-             .help('help', 'Print this message')
-             .version(version, 'version', 'Print version number')
-             .demand(1)
+      .strict()
+      .usage(format('Usage:  %s [-<SIGNAL>] [option]... <name>', name))
+      .help('help', 'Print this message')
+      .version(version, 'version', 'Print version number')
+      .demand(1)
 
-             .dashed('signal')
-             .option('signal', {
-               default: 'TERM',
-               description: 'Signal to be sent'
-             })
-             .check(obj(function (argv) {
-               return !Array.isArray(argv.signal);
-             }).set('toString', function () {
-               return '--signal set multiple times';
-             }).get())
+      .dashed('signal')
+      .option('signal', {
+        default: 'TERM',
+        description: 'Signal to be sent'
+      })
+      .check(obj(function (argv) {
+        return !Array.isArray(argv.signal);
+      }).set('toString', function () {
+        return '--signal set multiple times';
+      }).get())
 
-             .options({
-               pid: {
-                 alias: 'p',
-                 boolean: true,
-                 default: true,
-                 description: 'Show PID'
-               },
-               ppid: {
-                 alias: 'P',
-                 boolean: true,
-                 default: false,
-                 description: 'Show PPID'
-               },
-               user: {
-                 alias: 'u',
-                 boolean: true,
-                 default: false,
-                 description: 'Show EUSER'
-               },
-               command: {
-                 alias: 'c',
-                 boolean: true,
-                 default: false,
-                 description: 'Show COMMAND'
-               },
-               start: {
-                 alias: 's',
-                 boolean: true,
-                 default: true,
-                 description: 'Show START'
-               },
-               cpu: {
-                 alias: 'C',
-                 boolean: true,
-                 default: false,
-                 description: 'Show %CPU'
-               },
-               mem: {
-                 alias: 'M',
-                 boolean: true,
-                 default: false,
-                 description: 'Show %MEM'
-               },
-               tty: {
-                 alias: 'T',
-                 boolean: true,
-                 default: false,
-                 description: 'Show TTY'
-               }
-             })
-             .option('all', {
-               boolean: true,
-               description: 'Show all'
-             })
-             .argv;
+      .options({
+        pid: {
+          alias: 'p',
+          boolean: true,
+          default: true,
+          description: 'Show PID'
+        },
+        ppid: {
+          alias: 'P',
+          boolean: true,
+          default: false,
+          description: 'Show PPID'
+        },
+        user: {
+          alias: 'u',
+          boolean: true,
+          default: false,
+          description: 'Show EUSER'
+        },
+        command: {
+          alias: 'c',
+          boolean: true,
+          default: false,
+          description: 'Show COMMAND'
+        },
+        start: {
+          alias: 's',
+          boolean: true,
+          default: true,
+          description: 'Show START'
+        },
+        cpu: {
+          alias: 'C',
+          boolean: true,
+          default: false,
+          description: 'Show %CPU'
+        },
+        mem: {
+          alias: 'M',
+          boolean: true,
+          default: false,
+          description: 'Show %MEM'
+        },
+        tty: {
+          alias: 'T',
+          boolean: true,
+          default: false,
+          description: 'Show TTY'
+        }
+      })
+      .option('all', {
+        boolean: true,
+        description: 'Show all'
+      })
+      .argv;
 
 
 var psKeyMap = [
@@ -166,12 +166,13 @@ var printProcessInfo = function(pid, keys, cb) {
           indices = indices.match(/\d/g) || [];
         }
         else {
-          indices = indices.replace(/,/g, ' ')
-                           .replace(/[^\d\s]+/g, '')
-                           .trim()
-                           .split(/\s+/)
+          indices = indices
+            .replace(/,/g, ' ')
+            .replace(/[^\d\s]+/g, '')
+            .trim()
+            .split(/\s+/)
           // Mapping to Number will equate 1 and 01.
-                           .map(Number);
+            .map(Number);
         }
 
         indices = uniq(indices);
