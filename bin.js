@@ -145,7 +145,10 @@ var printProcessInfo = function(pid, keys, cb) {
   spawn('pgrep', ['-x', procname], {
     stdio: 'pipe'
   }).stdout.pipe(concat({ encoding: 'string' }, function (pids) {
-    pids = pids.trim().split(/\s+/).map(Number);
+    if (!(pids = pids.trim())) {
+      return;
+    }
+    pids = pids.split(/\s+/).map(Number);
 
     (function printPstrees(pids, index, cb) {
       if (index < pids.length) {
